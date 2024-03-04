@@ -12,9 +12,6 @@ DEFAULT_JSON = BASE_PATH.joinpath('videos.json')
 
 def do_it (videoFile : str, textList : list):
 
-# Python program to write 
-# text on video     
-
     if isinstance(textList,str):
         textList = [textList,]
         
@@ -35,27 +32,23 @@ def do_it (videoFile : str, textList : list):
                                     ,pos=(6,"center")
                                     ,col_opacity=0.6
                                     )
-        # print (type(txt_col))
         txt_mov = txt_col.set_pos( lambda t: (max(w/40,int(w-0.5*w*t))
                                              ,max(vPos*h/6,int(100*t))
                                             #  ,((vPos*h)/6)
                                              )
                                 )
-        # print (type(txt_mov))
-        # # print (txt_mov.__dict__.keys())
-        # print (f"start        : {txt_mov.start}")
-        # print (f"end          : {txt_mov.end}")
-        # print (f"duration     : {txt_mov.duration}")
-        # print (f"pos          : {txt_mov.pos}")
-        # print (f"relative_pos : {txt_mov.relative_pos}")
-        # print (f"size         : {txt_mov.size}")
         return txt_mov
     
     txtLift = doText (theText)
     final = mp.CompositeVideoClip([my_video,txtLift])
     final.set_duration(my_video.duration)
     outFile = inFile.with_suffix(f".combined{inFile.suffix}")
-    final.subclip(0,my_video.duration).write_videofile(str(outFile),fps=my_video.fps,codec='libx264')
+    final.subclip(0,my_video.duration).write_videofile(filename =   str(outFile)
+                                                      ,fps      =   my_video.fps
+                                                      ,codec    =   'libx264'
+                                                      ,threads  =   4
+                                                      ,logger   =   None
+                                                      )
     return outFile
 
 def processJSON (theFile : Path = DEFAULT_JSON):
@@ -70,7 +63,7 @@ def processJSON (theFile : Path = DEFAULT_JSON):
         else:
             liftTextLast = v["liftText"]
         if "repText" not in v:
-            v["repText"] = f"{ix+1}/{len(vids)}"
+            v["repText"] = f"{ix+1}/{len(theParms['vids'])}"
             
             
     theParms['vids'] =   [dict  (videoFile = v['videoFile']
@@ -79,18 +72,15 @@ def processJSON (theFile : Path = DEFAULT_JSON):
               for v in theParms['vids']
              ]
         
-    print("videos")
     videoFiles = [do_it(**v) for v in theParms['vids']]
-    print (videoFiles)
-    print("concat")
-    videos = [mp.VideoFileClip(str(v), audio=True) for v in videoFiles]
-    final_clip = mp.concatenate_videoclips(videos)
-    print("write")
+    final_clip = mp.concatenate_videoclips([mp.VideoFileClip(str(v), audio=True) for v in videoFiles])
     outPath = DATA_PATH.joinpath(theParms['vids'][0]['videoFile'])
     outPath = outPath.with_suffix(f".{theParms.get('liftType',None)}{outPath.suffix}")
     final_clip.write_videofile(str(outPath))
-    print("done")
+    theParms['videoFile'] = str(outPath)
     _ = [v.unlink() for v in videoFiles] 
+    theFile.write_text(json.dumps(theParms,indent=2))
+    # print("done")
     return outPath
 
 
