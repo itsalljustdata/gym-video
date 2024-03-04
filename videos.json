@@ -1,0 +1,33 @@
+{
+  "liftType": "Deadlift",
+  "videos": [
+    {
+      "videoFile": "20240304_180115.mp4",
+      "liftText": "1@155",
+      "RPE": "RPE7",
+      "repText": "1/1",
+      "commentText": "Last warm up"
+    },
+    {
+      "videoFile": "20240304_180727.mp4",
+      "liftText": "1@175",
+      "RPE": "RPE8.5",
+      "repText": "1/2",
+      "commentText": ""
+    },
+    {
+      "videoFile": "20240304_181259.mp4",
+      "liftText": "1@175",
+      "RPE": "RPE8.5",
+      "repText": "2/2",
+      "commentText": ""
+    },
+    {
+      "videoFile": "20240304_171856.mp4",
+      "liftText": "2@152.5",
+      "RPE": "RPE8",
+      "repText": "1/1",
+      "commentText": "Knackered now....."
+    }
+  ]
+}
