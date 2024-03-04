@@ -85,4 +85,4 @@ def processJSON (theFile : Path = DEFAULT_JSON):
 
 
 if __name__ == '__main__':
-    outPath = processJSON()
+    print (processJSON())
