@@ -2,10 +2,6 @@ import moviepy.editor as mp
 from pathlib import Path
 import json
 
-# from moviepy.config import change_settings
-# change_settings({"IMAGEMAGICK_BINARY": "/usr/bin/convert"})
-
-
 BASE_PATH = Path(__file__).parent
 DATA_PATH = BASE_PATH.joinpath('data')
 DEFAULT_JSON = BASE_PATH.joinpath('videos.json')
@@ -80,7 +76,6 @@ def processJSON (theFile : Path = DEFAULT_JSON):
     theParms['videoFile'] = str(outPath)
     _ = [v.unlink() for v in videoFiles] 
     theFile.write_text(json.dumps(theParms,indent=2))
-    # print("done")
     return outPath
 
 
